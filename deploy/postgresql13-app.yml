@@ -1,0 +1,34 @@
+---
+apiVersion: kubedirector.hpe.com/v1beta1
+kind: KubeDirectorApp
+metadata:
+  name: postgresql
+spec:
+  label:
+    name: PostgreSQL 13
+    description: PostgreSQL 13 on centos 7.8
+  distroID: dzinsouhpe/postgresql
+  version: '13'
+  configSchemaVersion: 7
+  defaultConfigPackage:
+    packageURL: file:///opt/configscripts/appconfig.tgz
+  defaultImageRepoTag: docker.io/dzinsouhpe/postgresql:latest
+  services:
+  - id: pgsql-server
+    label:
+      name: PostgreSQL server
+    endpoint:
+      port: 5432
+      urlScheme: tcp
+      isDashboard: false
+  roles:
+  - id: pgsql-server
+    cardinality: "1"
+  config:
+    selectedRoles:
+    - pgsql-server
+    roleServices:
+    - roleID: pgsql-server
+      serviceIDs:
+      - pgsql-server
+  systemdRequired: false
